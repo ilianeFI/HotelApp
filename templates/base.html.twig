@@ -1,17 +1,351 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Hotel Reservation{% endblock %}</title>
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {# Bootstrap CSS #}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    {# Icons #}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    {# Fonts élégantes #}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    {# ====== THEME LUXE OR (Noir / Or / Marbre) ====== #}
+    <style>
+        :root{
+            --bg:#0b0a08;               /* noir profond */
+            --bg2:#12100d;              /* noir doux */
+            --ivory:#f5efdf;            /* ivoire */
+            --muted: rgba(245,239,223,.78);
+            --gold:#caa24a;             /* or */
+            --gold2:#f2d38b;            /* or clair */
+            --stroke: rgba(202,162,74,.22);
+            --glass: rgba(15,13,10,.60);
+            --card: rgba(255,255,255,.06);
+        }
+
+        body{
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            background:
+                radial-gradient(1000px 600px at 20% 10%, rgba(202,162,74,.13), transparent 60%),
+                radial-gradient(900px 700px at 90% 30%, rgba(242,211,139,.09), transparent 55%),
+                linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+            color: var(--ivory);
+        }
+
+        /* Background marbre + overlay noir/or */
+        .lux-bg{
+            min-height: 100vh;
+            background-image:
+                linear-gradient(180deg, rgba(11,10,8,.70) 0%, rgba(11,10,8,.86) 55%, rgba(11,10,8,.96) 100%),
+                url("https://images.unsplash.com/photo-1523293836415-7d274b2f3f63?auto=format&fit=crop&w=1920&q=70");
+            background-size: cover;
+            background-position: center;
+            background-attachment: scroll;
+        }
+
+        /* Navbar premium */
+        .navbar.lux-nav{
+            background: rgba(10,9,7,.65) !important;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(202,162,74,.18);
+        }
+        .navbar.lux-nav .navbar-brand{
+            font-family: "Playfair Display", serif;
+            letter-spacing: .4px;
+            color: var(--ivory) !important;
+        }
+        .navbar.lux-nav .nav-link{
+            color: rgba(245,239,223,.86) !important;
+            font-weight: 500;
+        }
+        .navbar.lux-nav .nav-link:hover{
+            color: var(--gold2) !important;
+        }
+
+        .navbar.lux-nav .dropdown-menu{
+            background: rgba(12,10,8,.92);
+            border: 1px solid rgba(202,162,74,.20);
+            box-shadow: 0 18px 40px rgba(0,0,0,.45);
+            border-radius: 16px;
+        }
+        .navbar.lux-nav .dropdown-item{
+            color: rgba(245,239,223,.88);
+        }
+        .navbar.lux-nav .dropdown-item:hover{
+            background: rgba(202,162,74,.12);
+            color: var(--ivory);
+        }
+
+        /* Badge logo or */
+        .brand-badge{
+            width:34px;height:34px;
+            background: radial-gradient(circle at 30% 30%, rgba(242,211,139,.35), rgba(202,162,74,.18));
+            border: 1px solid rgba(202,162,74,.35);
+            color: var(--gold2);
+            box-shadow: 0 10px 22px rgba(202,162,74,.18);
+        }
+
+        /* Boutons OR */
+        .btn-gold{
+            --bs-btn-bg: var(--gold);
+            --bs-btn-border-color: rgba(202,162,74,.70);
+            --bs-btn-hover-bg: #b58f3e;
+            --bs-btn-hover-border-color: #b58f3e;
+            --bs-btn-color: #0b0a08;
+            font-weight: 700;
+            box-shadow: 0 12px 30px rgba(202,162,74,.22);
+        }
+        .btn-outline-gold{
+            --bs-btn-color: var(--gold2);
+            --bs-btn-border-color: rgba(242,211,139,.55);
+            --bs-btn-hover-bg: rgba(202,162,74,.14);
+            --bs-btn-hover-border-color: rgba(242,211,139,.80);
+            --bs-btn-hover-color: var(--ivory);
+            font-weight: 700;
+        }
+
+        /* Cartes / cadres */
+        .lux-card{
+            background: linear-gradient(180deg, rgba(15,13,10,.70), rgba(15,13,10,.48));
+            border: 1px solid rgba(202,162,74,.18);
+            border-radius: 18px;
+            box-shadow: 0 18px 55px rgba(0,0,0,.45);
+        }
+        .lux-frame{
+            background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+            border: 1px solid rgba(242,211,139,.14);
+            border-radius: 22px;
+            box-shadow: 0 22px 70px rgba(0,0,0,.55);
+        }
+
+        /* Flash messages */
+        .alert{
+            border-radius: 16px;
+            border: 1px solid rgba(242,211,139,.18);
+            color: var(--ivory);
+        }
+        .alert-success{ background: rgba(25,135,84,.18); }
+        .alert-danger{  background: rgba(220,53,69,.18); }
+        .alert-warning{ background: rgba(255,193,7,.18); }
+        .alert-info{    background: rgba(13,202,240,.14); }
+
+        .btn-close{
+            filter: invert(1);
+            opacity: .75;
+        }
+
+        /* Footer */
+        .lux-footer{
+            border-top: 1px solid rgba(202,162,74,.18);
+            background: rgba(10,9,7,.65);
+            backdrop-filter: blur(12px);
+        }
+
+        /* Toggler */
+        .navbar-toggler{
+            border-color: rgba(242,211,139,.25) !important;
+        }
+        .navbar-toggler-icon{
+            filter: invert(1);
+            opacity: .9;
+        }
+
+        /* Liens */
+        a{ color: var(--gold2); }
+        a:hover{ color: var(--gold); }
+
+        /* Option titre */
+        .page-title{
+            font-family: "Playfair Display", serif;
+            letter-spacing: .2px;
+        }
+        /* ===== Forms Luxury (global) ===== */
+                .form-label{
+                color: rgba(242,211,139,.85) !important;
+                font-weight: 600;
+                }
+
+                .form-control, .form-select, .form-check-input, textarea{
+                background: rgba(255,255,255,.06) !important;
+                border-color: rgba(242,211,139,.18) !important;
+                color: rgba(245,239,223,.92) !important;
+                border-radius: 14px;
+                }
+
+                .form-control::placeholder, textarea::placeholder{
+                color: rgba(245,239,223,.55) !important;
+                }
+
+                .form-control:focus, .form-select:focus, textarea:focus{
+                box-shadow: 0 0 0 .25rem rgba(202,162,74,.18) !important;
+                border-color: rgba(242,211,139,.42) !important;
+                }
+
+                .form-check-label{
+                color: rgba(245,239,223,.78) !important;
+                }
+
+                .form-check-input{
+                border-radius: 6px;
+                }
+
+                .form-check-input:checked{
+                background-color: rgba(202,162,74,.95) !important;
+                border-color: rgba(202,162,74,.95) !important;
+                }
+
+                .invalid-feedback, .form-error-message, .form-errors{
+                color: rgba(255,150,150,.95) !important;
+                }
+
+                /* Symfony errors */
+                ul{
+                margin-bottom: 0;
+                }
+                ul li{
+                color: rgba(255,170,170,.95);
+                }
+                input[type="date"]{
+                color-scheme: dark; /* rend le datepicker plus adapté au thème sombre */
+                }
+    </style>
+
+    {% block stylesheets %}{% endblock %}
+</head>
+
+<body class="d-flex flex-column min-vh-100 lux-bg">
+
+{# ================= NAVBAR ================= #}
+<nav class="navbar navbar-expand-lg lux-nav shadow-sm sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{{ path('app_home') }}">
+            <span class="d-inline-flex align-items-center justify-content-center rounded-circle brand-badge">
+                <i class="bi bi-gem"></i>
+            </span>
+            HotelApp
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarMain">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('reservation_search') }}">
+                        <i class="bi bi-search me-1"></i>
+                        Rechercher une chambre
+                    </a>
+                </li>
+
+                {% if app.user %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('user_reservations') }}">
+                            <i class="bi bi-calendar2-check me-1"></i>
+                            Mes réservations
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-shield-lock me-1"></i>
+                            Admin
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ path('admin_dashboard') }}"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+                            <li><a class="dropdown-item" href="{{ path('app_room_index') }}"><i class="bi bi-door-open me-2"></i>Chambres</a></li>
+                            <li><a class="dropdown-item" href="{{ path('admin_reservations') }}"><i class="bi bi-journal-check me-2"></i>Réservations</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+            </ul>
+
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
+                {% if app.user %}
+                    <li class="nav-item">
+                        <span class="navbar-text me-2 small" style="color: var(--muted) !important;">
+                            <i class="bi bi-person-circle me-1"></i>
+                            {{ app.user.email }}
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-outline-gold btn-sm" href="{{ path('app_logout') }}">
+                            <i class="bi bi-box-arrow-right me-1"></i>
+                            Déconnexion
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="btn btn-outline-gold btn-sm" href="{{ path('app_login') }}">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>
+                            Connexion
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-gold btn-sm" href="{{ path('app_register') }}">
+                            <i class="bi bi-person-plus me-1"></i>
+                            Inscription
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+{# ================= FLASH MESSAGES ================= #}
+<div class="container mt-3">
+    {% for type, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ type }} alert-dismissible fade show lux-card" role="alert">
+                <div class="d-flex align-items-start gap-2">
+                    <i class="bi bi-info-circle mt-1"></i>
+                    <div class="flex-grow-1">
+                        {{ message }}
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+</div>
+
+{# ================= CONTENT ================= #}
+<main class="flex-grow-1">
+    <div class="container my-4">
+        <div class="lux-frame p-3 p-md-4">
+            {% block body %}{% endblock %}
+        </div>
+    </div>
+</main>
+
+{# ================= FOOTER ================= #}
+<footer class="lux-footer text-center py-3 mt-auto">
+    <div class="container small" style="color: var(--muted);">
+        <div class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-2">
+            <span>© {{ "now"|date("Y") }} <strong style="color: var(--ivory);">HotelApp</strong> — Symfony 8</span>
+            <span class="d-inline-flex align-items-center gap-2">
+                <i class="bi bi-stars" style="color: var(--gold2);"></i> Luxe • Confort • Service
+            </span>
+        </div>
+    </div>
+</footer>
+
+{# Bootstrap JS #}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+{% block javascripts %}{% endblock %}
+</body>
 </html>

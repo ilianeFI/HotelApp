@@ -1,0 +1,7 @@
+<form method="post" action="{{ path('admin_reservation_delete', {'id': res.id}) }}">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ res.id) }}">
+    <button type="submit" class="btn btn-danger" 
+            onclick="return confirm('Supprimer cette réservation ?')">
+        Supprimer
+    </button>
+</form>

@@ -1,0 +1,136 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+
+    <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-2 mb-4">
+        <div>
+            <h1 class="page-title mb-1">Dashboard Administrateur</h1>
+            <div class="small" style="color: rgba(245,239,223,.72);">
+                Statistiques rapides & dernières réservations.
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 flex-wrap">
+            <a href="{{ path('app_room_index') }}" class="btn btn-outline-gold">
+                <i class="bi bi-door-open me-2"></i>Gérer chambres
+            </a>
+            <a href="{{ path('admin_reservations') }}" class="btn btn-gold">
+                <i class="bi bi-journal-check me-2"></i>Voir réservations
+            </a>
+        </div>
+    </div>
+
+    {# ===== KPI CARDS ===== #}
+    <div class="row g-3 mb-4">
+        {% set cards = [
+            ['Total réservations', totalReservations, 'bi-collection'],
+            ['Confirmées', confirmedReservations, 'bi-check2-circle'],
+            ['Annulées', cancelledReservations, 'bi-x-circle'],
+            ['Chambres', totalRooms, 'bi-door-open'],
+            ['Disponibles', availableRooms, 'bi-unlock']
+        ] %}
+
+        {% for c in cards %}
+            <div class="col-12 col-sm-6 col-lg">
+                <div class="lux-card p-4 h-100">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="small mb-1" style="color: rgba(242,211,139,.85);">
+                                {{ c[0] }}
+                            </div>
+                            <div class="fs-3 fw-bold" style="color: rgba(245,239,223,.95);">
+                                {{ c[1] }}
+                            </div>
+                        </div>
+                        <div class="brand-badge rounded-circle d-inline-flex align-items-center justify-content-center"
+                             style="width:46px;height:46px;">
+                            <i class="bi {{ c[2] }} fs-5"></i>
+                        </div>
+                    </div>
+
+                    <div class="mt-3"
+                         style="height: 2px; background: linear-gradient(90deg, rgba(242,211,139,.55), rgba(242,211,139,0));">
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {# ===== TABLE RECENT ===== #}
+    <div class="lux-card p-0 overflow-hidden">
+        <div class="d-flex align-items-center justify-content-between px-4 py-3"
+             style="border-bottom: 1px solid rgba(242,211,139,.18);">
+            <div class="fw-bold" style="color: rgba(245,239,223,.92);">
+                <i class="bi bi-clock-history me-2" style="color: rgba(242,211,139,.85);"></i>
+                Dernières réservations
+            </div>
+
+            <span class="badge rounded-pill"
+                  style="background: rgba(242,211,139,.12); border:1px solid rgba(242,211,139,.22); color: rgba(245,239,223,.90);">
+                {{ recentReservations|length }} élément(s)
+            </span>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table align-middle mb-0"
+                   style="--bs-table-bg: transparent; --bs-table-color: rgba(245,239,223,.90);">
+                <thead>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,.06);">
+                        <th class="py-3 px-4" style="color: rgba(242,211,139,.92);">Client</th>
+                        <th class="py-3" style="color: rgba(242,211,139,.92);">Chambre</th>
+                        <th class="py-3" style="color: rgba(242,211,139,.92);">Dates</th>
+                        <th class="py-3" style="color: rgba(242,211,139,.92);">Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in recentReservations %}
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,.06);">
+                            <td class="py-3 px-4">
+                                <i class="bi bi-person-circle me-2" style="color: rgba(242,211,139,.75);"></i>
+                                {{ r.user.email }}
+                            </td>
+
+                            <td class="py-3">
+                                <span class="badge rounded-pill"
+                                      style="background: rgba(242,211,139,.12); border:1px solid rgba(242,211,139,.22); color: rgba(245,239,223,.92);">
+                                    <i class="bi bi-door-open me-1"></i> {{ r.room.number }}
+                                </span>
+                            </td>
+
+                            <td class="py-3" style="color: rgba(245,239,223,.78);">
+                                {{ r.startDate|date('d/m') }} → {{ r.endDate|date('d/m') }}
+                            </td>
+
+                            <td class="py-3">
+                                {% if r.status == 'Confirmée' %}
+                                    <span class="badge rounded-pill"
+                                          style="background: rgba(25,135,84,.20); border:1px solid rgba(25,135,84,.35);">
+                                        <i class="bi bi-check2-circle me-1"></i> {{ r.status }}
+                                    </span>
+                                {% else %}
+                                    <span class="badge rounded-pill"
+                                          style="background: rgba(220,53,69,.20); border:1px solid rgba(220,53,69,.35);">
+                                        <i class="bi bi-x-circle me-1"></i> {{ r.status }}
+                                    </span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="py-4 text-center">
+                                <div class="small" style="color: rgba(245,239,223,.65);">
+                                    <i class="bi bi-info-circle me-2"></i>Aucune réservation
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

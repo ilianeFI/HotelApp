@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Réservation{% endblock %}
+
+{% block body %}
+<div class="container py-5" style="max-width: 720px;">
+
+    <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-2 mb-4">
+        <div>
+            <h1 class="page-title mb-1">Modifier la réservation</h1>
+            <div class="small" style="color: rgba(245,239,223,.72);">
+                Réservation <span style="color: rgba(242,211,139,.92);">#{{ reservation.id }}</span> — mise à jour des dates.
+            </div>
+        </div>
+
+        <a href="{{ path('admin_reservations') }}" class="btn btn-outline-gold">
+            <i class="bi bi-arrow-left me-2"></i>Retour
+        </a>
+    </div>
+
+    <div class="lux-card p-4 p-md-5">
+
+        {# Flash messages #}
+        {% for msg in app.flashes('danger') %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-x-circle me-2"></i>
+                {{ msg }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+
+        {% for msg in app.flashes('success') %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check2-circle me-2"></i>
+                {{ msg }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+
+        <form method="post" class="needs-validation" novalidate>
+
+            <div class="row g-3">
+                <div class="col-12 col-md-6">
+                    <div class="p-3 rounded-4"
+                         style="background: rgba(255,255,255,.04); border: 1px solid rgba(242,211,139,.12);">
+                        <label for="startDate" class="form-label">
+                            <i class="bi bi-calendar-event me-1"></i> Date de début
+                        </label>
+                        <input type="date" id="startDate" name="startDate"
+                               class="form-control"
+                               value="{{ reservation.startDate|date('Y-m-d') }}" required>
+                        <div class="invalid-feedback">
+                            Veuillez sélectionner une date de début valide.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="p-3 rounded-4"
+                         style="background: rgba(255,255,255,.04); border: 1px solid rgba(242,211,139,.12);">
+                        <label for="endDate" class="form-label">
+                            <i class="bi bi-calendar2-week me-1"></i> Date de fin
+                        </label>
+                        <input type="date" id="endDate" name="endDate"
+                               class="form-control"
+                               value="{{ reservation.endDate|date('Y-m-d') }}" required>
+                        <div class="invalid-feedback">
+                            Veuillez sélectionner une date de fin valide.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-column flex-md-row justify-content-between gap-2 mt-4">
+                <button type="submit" class="btn btn-gold btn-lg">
+                    <i class="bi bi-check-lg me-2"></i> Enregistrer
+                </button>
+                <a href="{{ path('admin_reservations') }}" class="btn btn-outline-gold btn-lg">
+                    <i class="bi bi-x-lg me-2"></i> Annuler
+                </a>
+            </div>
+
+            <div class="small mt-3" style="color: rgba(245,239,223,.60);">
+                <i class="bi bi-info-circle me-1" style="color: rgba(242,211,139,.70);"></i>
+                Pensez à vérifier que le check-out est après le check-in.
+            </div>
+
+        </form>
+    </div>
+</div>
+
+{# Validation bootstrap côté client #}
+<script>
+    (() => {
+      'use strict'
+      const forms = document.querySelectorAll('.needs-validation')
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+          form.classList.add('was-validated')
+        }, false)
+      })
+    })()
+</script>
+
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle chambre{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+
+            <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-2 mb-4">
+                <div>
+                    <h1 class="page-title mb-1">Créer une nouvelle chambre</h1>
+                    <div class="small" style="color: rgba(245,239,223,.72);">
+                        Ajoutez une chambre, son prix, capacité, description et image.
+                    </div>
+                </div>
+
+                <a href="{{ path('app_room_index') }}" class="btn btn-outline-gold">
+                    <i class="bi bi-arrow-left me-2"></i>Retour à la liste
+                </a>
+            </div>
+
+            <div class="lux-card p-4 p-md-5">
+
+                {# Messages flash #}
+                {% for msg in app.flashes('success') %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="bi bi-check2-circle me-2"></i>
+                        {{ msg }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+
+                {# Formulaire #}
+                {{ include('admin/room/_form.html.twig', {'button_label': 'Créer'}) }}
+
+                <div class="small mt-3" style="color: rgba(245,239,223,.60);">
+                    <i class="bi bi-info-circle me-1" style="color: rgba(242,211,139,.70);"></i>
+                    Conseil : ajoute une image horizontale (ex: 1200×800) pour un rendu parfait.
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

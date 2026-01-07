@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle réservation{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+
+    <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-2 mb-4">
+        <div>
+            <h1 class="page-title mb-1">Nouvelle réservation</h1>
+            <div class="small" style="color: rgba(245,239,223,.72);">
+                Complétez les informations pour confirmer votre réservation.
+            </div>
+        </div>
+
+        <a href="{{ path('app_reservation_index') }}" class="btn btn-outline-gold">
+            <i class="bi bi-arrow-left me-2"></i>Retour à la liste
+        </a>
+    </div>
+
+    <div class="lux-card p-4 p-md-5">
+        {{ include('reservation/_form.html.twig') }}
+    </div>
+
+</div>
+{% endblock %}

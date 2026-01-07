@@ -1,0 +1,152 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rechercher une chambre{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+
+    <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-2 mb-4">
+        <div>
+            <h1 class="page-title mb-1">Bonjour {{ app.user.userName }}</h1>
+            <div class="small" style="color: rgba(245,239,223,.72);">
+                Choisissez vos dates et le nombre de personnes pour vérifier la disponibilité.
+            </div>
+        </div>
+
+        <a href="{{ path('user_reservations') }}" class="btn btn-outline-gold">
+            <i class="bi bi-calendar2-check me-2"></i>Mes réservations
+        </a>
+    </div>
+
+    {# ===== FORM (glass / or) ===== #}
+    <div class="lux-card p-4 p-md-5 mb-4">
+        {{ form_start(form, { attr: { 'data-turbo': 'false' } }) }}
+            {{ form_errors(form) }}
+
+            <div class="row g-3">
+                <div class="col-12 col-md-4">
+                    <div class="p-3 rounded-4"
+                         style="background: rgba(255,255,255,.04); border: 1px solid rgba(242,211,139,.12);">
+                        <div class="small mb-1" style="color: rgba(242,211,139,.85);">
+                            <i class="bi bi-calendar-event me-1"></i> Check-in
+                        </div>
+                        {{ form_row(form.startDate) }}
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <div class="p-3 rounded-4"
+                         style="background: rgba(255,255,255,.04); border: 1px solid rgba(242,211,139,.12);">
+                        <div class="small mb-1" style="color: rgba(242,211,139,.85);">
+                            <i class="bi bi-calendar2-week me-1"></i> Check-out
+                        </div>
+                        {{ form_row(form.endDate) }}
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <div class="p-3 rounded-4"
+                         style="background: rgba(255,255,255,.04); border: 1px solid rgba(242,211,139,.12);">
+                        <div class="small mb-1" style="color: rgba(242,211,139,.85);">
+                            <i class="bi bi-people me-1"></i> Personnes
+                        </div>
+                        {{ form_row(form.personnes) }}
+                    </div>
+                </div>
+            </div>
+
+
+        {{ form_end(form) }}
+    </div>
+
+    {# ===== RESULTS ===== #}
+    {% if rooms is not empty %}
+        <div class="d-flex align-items-end justify-content-between mb-3">
+            <div>
+                <h2 class="page-title mb-1">Chambres disponibles</h2>
+                <div class="small" style="color: rgba(245,239,223,.72);">
+                    Sélectionnez la chambre qui vous convient.
+                </div>
+            </div>
+            <span class="badge rounded-pill"
+                  style="background: rgba(242,211,139,.12); border:1px solid rgba(242,211,139,.22); color: rgba(245,239,223,.90);">
+                <i class="bi bi-door-open me-1"></i> {{ rooms|length }} résultat(s)
+            </span>
+        </div>
+
+        <div class="row g-3">
+            {% for room in rooms %}
+                <div class="col-12 col-md-6">
+                    <div class="lux-card h-100 overflow-hidden">
+
+                        {% if room.image %}
+                            <img src="{{ asset('uploads/rooms/' ~ room.image) }}"
+                                 class="w-100"
+                                 style="height:220px; object-fit:cover;"
+                                 alt="Room">
+                        {% else %}
+                            <div class="d-flex align-items-center justify-content-center"
+                                 style="height:220px; background: rgba(255,255,255,.05); border-bottom: 1px solid rgba(242,211,139,.12);">
+                                <div class="text-center">
+                                    <i class="bi bi-image fs-2" style="color: rgba(242,211,139,.70);"></i>
+                                    <div class="small" style="color: rgba(245,239,223,.60);">Aucune image</div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <div class="p-4">
+                            <div class="d-flex align-items-start justify-content-between gap-2">
+                                <div>
+                                    <h5 class="mb-1" style="color: rgba(245,239,223,.95);">
+                                        {{ room.name ?? ('Room #' ~ room.id) }}
+                                    </h5>
+                                    <div class="small" style="color: rgba(245,239,223,.70);">
+                                        <i class="bi bi-people me-1"></i> Capacité : <strong>{{ room.capacity }}</strong> personnes
+                                    </div>
+                                </div>
+
+                                <span class="badge rounded-pill"
+                                      style="background: rgba(202,162,74,.14); border:1px solid rgba(202,162,74,.22); color: rgba(245,239,223,.92);">
+                                    <i class="bi bi-cash-coin me-1"></i>
+                                    {{ room.price }} MAD / nuit
+                                </span>
+                            </div>
+
+                            <div class="d-grid mt-3">
+                                <a href="{{ path('reservation_confirm', {
+                                        roomId: room.id,
+                                        startDate: search.startDate|date('Y-m-d'),
+                                        endDate: search.endDate|date('Y-m-d'),
+                                        personnes: search.personnes
+                                    }) }}"
+                                   class="btn btn-gold btn-lg">
+                                    <i class="bi bi-check2-circle me-2"></i> Sélectionner
+                                </a>
+                            </div>
+
+                            <div class="small mt-2" style="color: rgba(245,239,223,.60);">
+                                <i class="bi bi-shield-check me-1" style="color: rgba(242,211,139,.70);"></i>
+                                Réservation sécurisée
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    {% elseif submitted %}
+        <div class="alert alert-warning lux-card mt-3" role="alert">
+            <i class="bi bi-exclamation-circle me-2"></i>
+            Aucune chambre disponible pour ces dates.
+        </div>
+    {% endif %}
+
+    {% for msg in app.flashes('error') %}
+        <div class="alert alert-danger lux-card mt-3" role="alert">
+            <i class="bi bi-x-circle me-2"></i> {{ msg }}
+        </div>
+    {% endfor %}
+
+</div>
+{% endblock %}

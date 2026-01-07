@@ -1,0 +1,155 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Toutes les réservations{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+
+    <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-2 mb-4">
+        <div>
+            <h1 class="page-title mb-1">Toutes les réservations</h1>
+            <div class="small" style="color: rgba(245,239,223,.72);">
+                Gestion complète : voir, modifier ou supprimer.
+            </div>
+        </div>
+
+        <a href="{{ path('admin_dashboard') }}" class="btn btn-outline-gold">
+            <i class="bi bi-speedometer2 me-2"></i>Retour Dashboard
+        </a>
+    </div>
+
+    {# Flash messages #}
+    {% for msg in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show lux-card" role="alert">
+            <i class="bi bi-check2-circle me-2"></i>
+            {{ msg }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+
+    <div class="lux-card p-0 overflow-hidden">
+        <div class="d-flex align-items-center justify-content-between px-4 py-3"
+             style="border-bottom: 1px solid rgba(242,211,139,.18);">
+            <div class="fw-bold" style="color: rgba(245,239,223,.92);">
+                <i class="bi bi-journal-text me-2" style="color: rgba(242,211,139,.85);"></i>
+                Liste des réservations
+            </div>
+
+            <span class="badge rounded-pill"
+                  style="background: rgba(242,211,139,.12); border:1px solid rgba(242,211,139,.22); color: rgba(245,239,223,.90);">
+                {{ reservations|length }} réservation(s)
+            </span>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table align-middle mb-0"
+                   style="--bs-table-bg: transparent; --bs-table-color: rgba(245,239,223,.90);">
+                <thead>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,.06);">
+                        <th class="py-3 px-4" style="color: rgba(242,211,139,.92);">ID</th>
+                        <th class="py-3" style="color: rgba(242,211,139,.92);">Client</th>
+                        <th class="py-3" style="color: rgba(242,211,139,.92);">Chambre</th>
+                        <th class="py-3" style="color: rgba(242,211,139,.92);">Date début</th>
+                        <th class="py-3" style="color: rgba(242,211,139,.92);">Date fin</th>
+                        <th class="py-3" style="color: rgba(242,211,139,.92);">Statut</th>
+                        <th class="py-3" style="color: rgba(242,211,139,.92);">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for res in reservations %}
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,.06);">
+                            <td class="py-3 px-4">
+                                <span class="badge rounded-pill"
+                                      style="background: rgba(242,211,139,.12); border:1px solid rgba(242,211,139,.22); color: rgba(245,239,223,.92);">
+                                    #{{ res.id }}
+                                </span>
+                            </td>
+
+                            <td class="py-3">
+                                <i class="bi bi-person-circle me-2" style="color: rgba(242,211,139,.75);"></i>
+                                {{ res.user.email }}
+                            </td>
+
+                            <td class="py-3">
+                                <span class="badge rounded-pill"
+                                      style="background: rgba(242,211,139,.10); border:1px solid rgba(242,211,139,.20); color: rgba(245,239,223,.90);">
+                                    <i class="bi bi-door-open me-1"></i> {{ res.room.number }}
+                                </span>
+                            </td>
+
+                            <td class="py-3" style="color: rgba(245,239,223,.78);">
+                                {{ res.startDate|date('d/m/Y') }}
+                            </td>
+
+                            <td class="py-3" style="color: rgba(245,239,223,.78);">
+                                {{ res.endDate|date('d/m/Y') }}
+                            </td>
+
+                            <td class="py-3">
+                                {% if res.status == 'Confirmée' %}
+                                    <span class="badge rounded-pill"
+                                          style="background: rgba(25,135,84,.20); border:1px solid rgba(25,135,84,.35);">
+                                        <i class="bi bi-check2-circle me-1"></i> {{ res.status }}
+                                    </span>
+                                {% elseif res.status == 'Annulée' %}
+                                    <span class="badge rounded-pill"
+                                          style="background: rgba(220,53,69,.20); border:1px solid rgba(220,53,69,.35);">
+                                        <i class="bi bi-x-circle me-1"></i> {{ res.status }}
+                                    </span>
+                                {% else %}
+                                    <span class="badge rounded-pill"
+                                          style="background: rgba(255,193,7,.18); border:1px solid rgba(255,193,7,.32); color: rgba(245,239,223,.92);">
+                                        <i class="bi bi-hourglass-split me-1"></i> {{ res.status }}
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <td class="py-3">
+                                <div class="d-flex gap-2 flex-wrap justify-content-start">
+
+                                    {# Voir #}
+                                    <a href="{{ path('admin_reservation_show', {'id': res.id}) }}"
+                                       class="btn btn-sm btn-outline-gold">
+                                        <i class="bi bi-eye me-1"></i> Voir
+                                    </a>
+
+                                    {# Modifier #}
+                                    <a href="{{ path('admin_reservation_update', {'id': res.id}) }}"
+                                       class="btn btn-sm btn-outline-gold">
+                                        <i class="bi bi-pencil-square me-1"></i> Modifier
+                                    </a>
+
+                                    {# Supprimer (POST) #}
+                                    <form method="post"
+                                          action="{{ path('admin_reservation_delete', {'id': res.id}) }}"
+                                          onsubmit="return confirm('Voulez-vous vraiment supprimer cette réservation ?');"
+                                          class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ res.id) }}">
+                                        <button type="submit"
+                                                class="btn btn-sm"
+                                                style="border:1px solid rgba(220,53,69,.55); color: rgba(245,239,223,.92); background: rgba(220,53,69,.10);">
+                                            <i class="bi bi-trash me-1"></i> Supprimer
+                                        </button>
+                                    </form>
+
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="py-4 text-center">
+                                <div class="small" style="color: rgba(245,239,223,.65);">
+                                    <i class="bi bi-info-circle me-2"></i>Aucune réservation trouvée.
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

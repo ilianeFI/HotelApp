@@ -1,0 +1,107 @@
+{# templates/admin/room/_form.html.twig #}
+
+{{ form_start(form) }}
+
+<div class="lux-card p-4 p-md-5 mb-4">
+    <div class="row g-3">
+
+        {# Number #}
+        <div class="col-12 col-md-6">
+            <div class="p-3 rounded-4"
+                 style="background: rgba(255,255,255,.04); border: 1px solid rgba(242,211,139,.12);">
+                <label class="form-label" for="{{ form.number.vars.id }}">
+                    <i class="bi bi-hash me-1"></i> Numéro de chambre
+                </label>
+                {{ form_widget(form.number) }}
+                {{ form_errors(form.number) }}
+            </div>
+        </div>
+
+        {# Price #}
+        <div class="col-12 col-md-6">
+            <div class="p-3 rounded-4"
+                 style="background: rgba(255,255,255,.04); border: 1px solid rgba(242,211,139,.12);">
+                <label class="form-label" for="{{ form.price.vars.id }}">
+                    <i class="bi bi-cash-coin me-1"></i> Prix / nuit
+                </label>
+                {{ form_widget(form.price) }}
+                {{ form_errors(form.price) }}
+                <div class="small mt-1" style="color: rgba(245,239,223,.60);">Devise : MAD</div>
+            </div>
+        </div>
+
+        {# Capacity #}
+        <div class="col-12 col-md-6">
+            <div class="p-3 rounded-4"
+                 style="background: rgba(255,255,255,.04); border: 1px solid rgba(242,211,139,.12);">
+                <label class="form-label" for="{{ form.capacity.vars.id }}">
+                    <i class="bi bi-people me-1"></i> Capacité (personnes)
+                </label>
+                {{ form_widget(form.capacity) }}
+                {{ form_errors(form.capacity) }}
+            </div>
+        </div>
+
+        {# Availability (Switch) #}
+        <div class="col-12 col-md-6">
+            <div class="p-3 rounded-4 h-100 d-flex align-items-center justify-content-between"
+                 style="background: rgba(255,255,255,.04); border: 1px solid rgba(242,211,139,.12);">
+                <div class="me-3">
+                    <div class="form-label mb-1">
+                        <i class="bi bi-unlock me-1"></i> Disponibilité
+                    </div>
+                    <div class="small" style="color: rgba(245,239,223,.60);">
+                        Activez si la chambre est disponible.
+                    </div>
+                </div>
+
+                <div class="form-check form-switch m-0">
+                    {{ form_widget(form.isAvailable, { attr: { class: 'form-check-input' } }) }}
+                </div>
+            </div>
+            <div class="mt-1">
+                {{ form_errors(form.isAvailable) }}
+            </div>
+        </div>
+
+        {# Description #}
+        <div class="col-12">
+            <div class="p-3 rounded-4"
+                 style="background: rgba(255,255,255,.04); border: 1px solid rgba(242,211,139,.12);">
+                <label class="form-label" for="{{ form.description.vars.id }}">
+                    <i class="bi bi-card-text me-1"></i> Description
+                </label>
+                {{ form_widget(form.description) }}
+                {{ form_errors(form.description) }}
+            </div>
+        </div>
+
+        {# Image #}
+        <div class="col-12">
+            <div class="p-3 rounded-4"
+                 style="background: rgba(255,255,255,.04); border: 1px solid rgba(242,211,139,.12);">
+                <label class="form-label" for="{{ form.imageFile.vars.id }}">
+                    <i class="bi bi-image me-1"></i> Image (JPG/PNG)
+                </label>
+                {{ form_widget(form.imageFile) }}
+                {{ form_errors(form.imageFile) }}
+                <div class="small mt-1" style="color: rgba(245,239,223,.60);">
+                    Max 20MB.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="d-flex flex-column flex-md-row gap-2">
+    <button type="submit" class="btn btn-gold btn-lg">
+        <i class="bi bi-check2-circle me-2"></i>{{ button_label|default('Créer') }}
+    </button>
+
+    <a href="{{ path('app_room_index') }}" class="btn btn-outline-gold btn-lg">
+        <i class="bi bi-x-circle me-2"></i>Annuler
+    </a>
+</div>
+
+{{ form_end(form) }}

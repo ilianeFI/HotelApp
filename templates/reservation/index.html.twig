@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reservations{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+
+    <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-2 mb-4">
+        <div>
+            <h1 class="page-title mb-1">Reservations</h1>
+            <div class="small" style="color: rgba(245,239,223,.72);">
+                Liste des réservations enregistrées.
+            </div>
+        </div>
+
+        <a href="{{ path('app_reservation_new') }}" class="btn btn-gold">
+            <i class="bi bi-plus-circle me-2"></i>Create new
+        </a>
+    </div>
+
+    <div class="lux-card p-3 p-md-4">
+        <div class="table-responsive">
+            <table class="table align-middle text-center mb-0"
+                   style="--bs-table-bg: transparent; --bs-table-color: rgba(245,239,223,.90);">
+                <thead>
+                    <tr style="border-bottom: 1px solid rgba(242,211,139,.18);">
+                        <th class="py-3" style="color: rgba(242,211,139,.92);">Id</th>
+                        <th class="py-3" style="color: rgba(242,211,139,.92);">StartDate</th>
+                        <th class="py-3" style="color: rgba(242,211,139,.92);">EndDate</th>
+                        <th class="py-3" style="color: rgba(242,211,139,.92);">Status</th>
+                        <th class="py-3" style="color: rgba(242,211,139,.92);">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                {% for reservation in reservations %}
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,.06);">
+                        <td class="py-3">
+                            <span class="badge rounded-pill"
+                                  style="background: rgba(242,211,139,.12); border:1px solid rgba(242,211,139,.22); color: rgba(245,239,223,.92);">
+                                #{{ reservation.id }}
+                            </span>
+                        </td>
+
+                        <td class="py-3">
+                            {{ reservation.startDate ? reservation.startDate|date('Y-m-d') : '' }}
+                        </td>
+
+                        <td class="py-3">
+                            {{ reservation.endDate ? reservation.endDate|date('Y-m-d') : '' }}
+                        </td>
+
+                        <td class="py-3">
+                            {% set s = reservation.status|lower %}
+
+                            {% if 'confirm' in s or 'confirmée' in s %}
+                                <span class="badge rounded-pill"
+                                      style="background: rgba(25,135,84,.20); border:1px solid rgba(25,135,84,.35);">
+                                    <i class="bi bi-check2-circle me-1"></i>{{ reservation.status }}
+                                </span>
+                            {% elseif 'annul' in s %}
+                                <span class="badge rounded-pill"
+                                      style="background: rgba(220,53,69,.20); border:1px solid rgba(220,53,69,.35);">
+                                    <i class="bi bi-x-circle me-1"></i>{{ reservation.status }}
+                                </span>
+                            {% else %}
+                                <span class="badge rounded-pill"
+                                      style="background: rgba(255,193,7,.18); border:1px solid rgba(255,193,7,.32); color: rgba(245,239,223,.92);">
+                                    <i class="bi bi-hourglass-split me-1"></i>{{ reservation.status }}
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td class="py-3">
+                            <div class="d-flex justify-content-center gap-2 flex-wrap">
+                                <a class="btn btn-sm btn-outline-gold"
+                                   href="{{ path('app_reservation_show', {'id': reservation.id}) }}">
+                                    <i class="bi bi-eye me-1"></i>show
+                                </a>
+
+                                <a class="btn btn-sm btn-outline-gold"
+                                   href="{{ path('app_reservation_edit', {'id': reservation.id}) }}">
+                                    <i class="bi bi-pencil me-1"></i>edit
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="py-4">
+                            <div class="alert alert-info lux-card mb-0" role="alert">
+                                <i class="bi bi-info-circle me-2"></i>
+                                no records found
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Réservations{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+
+    <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-2 mb-4">
+        <div>
+            <h1 class="page-title mb-1">
+                Bonjour {{ app.user.username }}
+            </h1>
+            <div class="small" style="color: rgba(245,239,223,.72);">
+                Voici l’historique de vos réservations.
+            </div>
+        </div>
+
+        <a href="{{ path('reservation_search') }}" class="btn btn-outline-gold">
+            <i class="bi bi-search me-2"></i>Nouvelle réservation
+        </a>
+    </div>
+
+    {% if reservations is empty %}
+        <div class="alert alert-info text-center lux-card" role="alert">
+            <i class="bi bi-info-circle me-2"></i>
+            Vous n'avez aucune réservation pour le moment.
+        </div>
+    {% else %}
+
+        <div class="lux-card p-3 p-md-4">
+            <div class="table-responsive">
+                <table class="table align-middle text-center mb-0"
+                       style="--bs-table-bg: transparent; --bs-table-color: rgba(245,239,223,.90);">
+                    <thead>
+                        <tr style="border-bottom: 1px solid rgba(242,211,139,.18);">
+                            <th class="py-3" style="color: rgba(242,211,139,.92);">Check-in</th>
+                            <th class="py-3" style="color: rgba(242,211,139,.92);">Check-out</th>
+                            <th class="py-3" style="color: rgba(242,211,139,.92);">Chambre</th>
+                            <th class="py-3" style="color: rgba(242,211,139,.92);">Statut</th>
+                            <th class="py-3" style="color: rgba(242,211,139,.92);">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for res in reservations %}
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,.06);">
+                                <td class="py-3">{{ res.startDate|date('d/m/Y') }}</td>
+                                <td class="py-3">{{ res.endDate|date('d/m/Y') }}</td>
+
+                                <td class="py-3">
+                                    <span class="badge rounded-pill"
+                                          style="background: rgba(242,211,139,.12); border:1px solid rgba(242,211,139,.22); color: rgba(245,239,223,.92);">
+                                        <i class="bi bi-door-open me-1"></i> {{ res.room.number }}
+                                    </span>
+                                </td>
+
+                                <td class="py-3">
+                                    {% if res.status == 'Confirmée' %}
+                                        <span class="badge rounded-pill"
+                                              style="background: rgba(25,135,84,.20); border:1px solid rgba(25,135,84,.35);">
+                                            <i class="bi bi-check2-circle me-1"></i> {{ res.status }}
+                                        </span>
+                                    {% elseif res.status == 'Annulée' %}
+                                        <span class="badge rounded-pill"
+                                              style="background: rgba(220,53,69,.20); border:1px solid rgba(220,53,69,.35);">
+                                            <i class="bi bi-x-circle me-1"></i> {{ res.status }}
+                                        </span>
+                                    {% else %}
+                                        <span class="badge rounded-pill"
+                                              style="background: rgba(255,193,7,.18); border:1px solid rgba(255,193,7,.32); color: rgba(245,239,223,.92);">
+                                            <i class="bi bi-hourglass-split me-1"></i> {{ res.status }}
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td class="py-3">
+                                    <div class="d-flex justify-content-center gap-2 flex-wrap">
+
+                                        <a class="btn btn-sm btn-outline-gold"
+                                           href="{{ path('reservation_update', {'id': res.id}) }}">
+                                            <i class="bi bi-pencil me-1"></i> Modifier
+                                        </a>
+
+                                        <a class="btn btn-sm"
+                                           style="border:1px solid rgba(220,53,69,.55); color: rgba(245,239,223,.92); background: rgba(220,53,69,.10);"
+                                           href="{{ path('reservation_cancel', {'id': res.id}) }}"
+                                           onclick="return confirm('Voulez-vous vraiment annuler cette réservation ?');">
+                                            <i class="bi bi-x-circle me-1"></i> Annuler
+                                        </a>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+        <div class="small mt-3" style="color: rgba(245,239,223,.65);">
+            Astuce : vous pouvez modifier une réservation si votre date d’arrivée n’est pas proche.
+        </div>
+
+    {% endif %}
+</div>
+{% endblock %}

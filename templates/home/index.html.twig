@@ -1,0 +1,182 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil | HotelApp{% endblock %}
+
+{% block body %}
+
+{# ===== HERO (image + texte + bouton) ===== #}
+<section class="position-relative overflow-hidden rounded-4 lux-card p-0 mb-4"
+         style="min-height: 420px;">
+    <div class="position-absolute top-0 start-0 w-100 h-100"
+         style="
+            background-image:
+                linear-gradient(90deg, rgba(11,10,8,.88) 0%, rgba(11,10,8,.55) 45%, rgba(11,10,8,.15) 100%),
+                url('{{ asset('assets/Hotel/home/pool-night.jpg') }}');
+            background-size: cover;
+            background-position: center;
+         ">
+    </div>
+
+    <div class="position-relative p-4 p-md-5" style="z-index: 1;">
+        <span class="badge rounded-pill text-bg-dark border"
+              style="border-color: rgba(242,211,139,.25) !important;">
+            <i class="bi bi-stars me-1" style="color: #f2d38b;"></i>
+            Hôtel • Luxe • Confort
+        </span>
+
+        <h1 class="page-title mt-3 mb-2" style="font-size: clamp(28px, 4vw, 52px);">
+            Vivez une expérience<br>exceptionnelle
+        </h1>
+
+        <p class="mb-4" style="max-width: 560px; color: rgba(245,239,223,.80);">
+            Un séjour élégant, des chambres raffinées, une piscine de rêve et des services premium.
+            Réservez en quelques clics.
+        </p>
+
+        <div class="d-flex flex-wrap gap-2">
+            <a href="{{ path('reservation_search') }}" class="btn btn-gold btn-lg">
+                <i class="bi bi-search me-2"></i>Rechercher une chambre
+            </a>
+            {% if not app.user %}
+                <a href="{{ path('app_register') }}" class="btn btn-outline-gold btn-lg">
+                    <i class="bi bi-person-plus me-2"></i>Créer un compte
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+{# ===== QUICK STATS ===== #}
+<div class="row g-3 mb-4">
+    <div class="col-12 col-md-4">
+        <div class="lux-card p-4 h-100">
+            <div class="d-flex align-items-center gap-3">
+                <div class="brand-badge rounded-circle d-inline-flex align-items-center justify-content-center" style="width:42px;height:42px;">
+                    <i class="bi bi-geo-alt"></i>
+                </div>
+                <div>
+                    <div class="fw-bold">Emplacement unique</div>
+                    <div class="small" style="color: rgba(245,239,223,.75);">Proche de la mer & des attractions</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="lux-card p-4 h-100">
+            <div class="d-flex align-items-center gap-3">
+                <div class="brand-badge rounded-circle d-inline-flex align-items-center justify-content-center" style="width:42px;height:42px;">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+                <div>
+                    <div class="fw-bold">Réservation sécurisée</div>
+                    <div class="small" style="color: rgba(245,239,223,.75);">Paiements et données protégés</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="lux-card p-4 h-100">
+            <div class="d-flex align-items-center gap-3">
+                <div class="brand-badge rounded-circle d-inline-flex align-items-center justify-content-center" style="width:42px;height:42px;">
+                    <i class="bi bi-headset"></i>
+                </div>
+                <div>
+                    <div class="fw-bold">Service premium</div>
+                    <div class="small" style="color: rgba(245,239,223,.75);">Accueil & assistance 24/7</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# ===== SECTION À PROPOS + IMAGE ===== #}
+<section class="lux-card p-4 p-md-5 mb-4">
+    <div class="row align-items-center g-4">
+        <div class="col-12 col-lg-6">
+            <h2 class="page-title mb-2">Un hôtel pensé pour le confort</h2>
+            <p style="color: rgba(245,239,223,.78);">
+                Profitez d’un cadre élégant et chaleureux : restauration raffinée, espaces de détente,
+                et un environnement idéal pour un séjour en couple, en famille ou professionnel.
+            </p>
+
+            <ul class="list-unstyled mb-0" style="color: rgba(245,239,223,.78);">
+                <li class="mb-2"><i class="bi bi-check2-circle me-2" style="color:#f2d38b;"></i>Chambres modernes & calmes</li>
+                <li class="mb-2"><i class="bi bi-check2-circle me-2" style="color:#f2d38b;"></i>Piscine & espaces détente</li>
+                <li class="mb-2"><i class="bi bi-check2-circle me-2" style="color:#f2d38b;"></i>Restaurant et petit-déjeuner</li>
+                <li><i class="bi bi-check2-circle me-2" style="color:#f2d38b;"></i>Salle de sport équipée</li>
+            </ul>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <div class="rounded-4 overflow-hidden border"
+                 style="border-color: rgba(242,211,139,.16) !important;">
+                <img src="{{ asset('assets/Hotel/home/buffet.jpg') }}"
+                     class="img-fluid" alt="Restaurant & buffet">
+            </div>
+        </div>
+    </div>
+</section>
+
+{# ===== SERVICES (cards avec images) ===== #}
+<section class="mb-4">
+    <div class="d-flex align-items-end justify-content-between mb-3">
+        <div>
+            <h2 class="page-title mb-1">Nos services</h2>
+            <div class="small" style="color: rgba(245,239,223,.72);">Tout ce qu’il faut pour un séjour parfait</div>
+        </div>
+        <a href="{{ path('reservation_search') }}" class="btn btn-outline-gold btn-sm">
+            Voir les chambres <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-12 col-lg-4">
+            <div class="lux-card h-100 overflow-hidden">
+                <img src="{{ asset('assets/Hotel/home/pool-day.jpg') }}" class="w-100" style="height: 210px; object-fit: cover;" alt="Piscine">
+                <div class="p-4">
+                    <div class="fw-bold mb-1"><i class="bi bi-water me-2" style="color:#f2d38b;"></i>Piscine & détente</div>
+                    <div class="small" style="color: rgba(245,239,223,.75);">Un espace calme pour se relaxer.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+            <div class="lux-card h-100 overflow-hidden">
+                <img src="{{ asset('assets/Hotel/home/beach.jpg') }}" class="w-100" style="height: 210px; object-fit: cover;" alt="Plage">
+                <div class="p-4">
+                    <div class="fw-bold mb-1"><i class="bi bi-sun me-2" style="color:#f2d38b;"></i>Vue & environnement</div>
+                    <div class="small" style="color: rgba(245,239,223,.75);">Profitez d’une atmosphère unique.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+            <div class="lux-card h-100 overflow-hidden">
+                <img src="{{ asset('assets/Hotel/home/gym.jpg') }}" class="w-100" style="height: 210px; object-fit: cover;" alt="Salle de sport">
+                <div class="p-4">
+                    <div class="fw-bold mb-1"><i class="bi bi-activity me-2" style="color:#f2d38b;"></i>Salle de sport</div>
+                    <div class="small" style="color: rgba(245,239,223,.75);">Restez en forme pendant votre séjour.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# ===== CTA FINAL ===== #}
+<section class="lux-card p-4 p-md-5">
+    <div class="row align-items-center g-3">
+        <div class="col-12 col-lg-8">
+            <h3 class="page-title mb-2">Prêt à réserver ?</h3>
+            <p class="mb-0" style="color: rgba(245,239,223,.78);">
+                Choisissez vos dates, trouvez la chambre idéale et confirmez en quelques secondes.
+            </p>
+        </div>
+        <div class="col-12 col-lg-4 text-lg-end">
+            <a href="{{ path('reservation_search') }}" class="btn btn-gold btn-lg w-100 w-lg-auto">
+                <i class="bi bi-calendar2-week me-2"></i>Réserver maintenant
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

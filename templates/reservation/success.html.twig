@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réservation confirmée{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+
+    <div class="lux-card p-4 p-md-5 text-center">
+        <div class="d-inline-flex align-items-center justify-content-center rounded-circle brand-badge mb-3"
+             style="width:72px;height:72px;">
+            <i class="bi bi-check2-circle fs-2"></i>
+        </div>
+
+        <h1 class="page-title mb-2" style="color: rgba(245,239,223,.95);">
+            Réservation confirmée
+        </h1>
+
+        <div class="small mb-4" style="color: rgba(245,239,223,.72); max-width: 680px; margin: 0 auto;">
+            Merci pour votre réservation ! Vous pouvez revenir à la recherche ou consulter vos réservations.
+        </div>
+
+        <div class="d-flex flex-column flex-md-row justify-content-center gap-2 gap-md-3">
+            <a href="{{ path('reservation_search') }}" class="btn btn-gold btn-lg">
+                <i class="bi bi-search me-2"></i>Rechercher d'autres chambres
+            </a>
+            <a href="{{ path('user_reservations') }}" class="btn btn-outline-gold btn-lg">
+                <i class="bi bi-calendar2-check me-2"></i>Voir mes réservations
+            </a>
+        </div>
+
+        <div class="mt-4 small" style="color: rgba(245,239,223,.60);">
+            <i class="bi bi-shield-check me-1" style="color: rgba(242,211,139,.70);"></i>
+            Confirmation enregistrée — réservation sécurisée
+        </div>
+    </div>
+
+</div>
+{% endblock %}

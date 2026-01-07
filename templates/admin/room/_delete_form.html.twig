@@ -1,0 +1,9 @@
+<form method="post" action="{{ path('app_room_delete', {'id': room.id}) }}" 
+      onsubmit="return confirm('Voulez-vous vraiment supprimer cette chambre ?');" 
+      style="display:inline;">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ room.id) }}">
+    <button type="submit" class="btn btn-danger btn-sm">
+        Supprimer
+    </button>
+</form>
+
